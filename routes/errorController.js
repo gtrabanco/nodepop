@@ -9,7 +9,7 @@ var router = express.Router();
 
 // Catch 404 and forward to error handler
 router.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    var err = new Error(req.i18n.__('Not Found'));
     err.status = 404;
     next(err);
 });
@@ -17,7 +17,6 @@ router.use(function(req, res, next) {
 // error handlers
 // no stacktraces leaked to user
 router.use(function(err, req, res, next) {
-    "use strict";
 
     console.log(err);
 

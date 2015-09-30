@@ -7,6 +7,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var httpForbidden = require('httpForbidden');
+var i18n = require('i18n-2');
+
 
 var app = express();
 
@@ -19,6 +21,13 @@ app.set('app path', __dirname);
 //Get and set the configuration of the site
 var config = require('config');
 app.set('app config', config);
+
+//Internalization of the app
+//Setting the dev or not mode
+config.app.language.devMode = app.get('env').toLowerCase() === 'development';
+
+//Registering i18n module
+i18n.expressBind(app, config.app.language);
 
 //Using our custom middleware to check if we are and should be in https connection
 app.use(httpForbidden);
