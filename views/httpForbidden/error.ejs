@@ -1,0 +1,4 @@
+<h1><%= error.status %> <%= error.message %></h1>
+<h2><%= error.detail %></h2>
+
+<%- (error.stack?'<pre>' + error.stack + '</pre>':'') %>
