@@ -34,6 +34,7 @@ let model = {
         type: String,
         required: true
     },
+    username: String,
     tokens: {
         type: [ObjectId],
         ref: 'Token'

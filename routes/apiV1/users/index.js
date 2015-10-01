@@ -17,12 +17,8 @@ var errorController = require('./errorController');
 
 router.use(indexController);
 
-//Routes of this controller
-
-
 
 //All other routes in sub dirs here
-router.use(require('./users'));
 
 //Error handler for /apiV1 path
 router.use(errorController);
