@@ -19,7 +19,7 @@ app.set('app path', __dirname);
 
 
 //Get and set the configuration of the site
-var config = require('config');
+var config = require('readConfigurationFiles');
 app.set('app config', config);
 
 //Internalization of the app
@@ -64,6 +64,5 @@ for (let dir in config.app['serve-static']) {
 // not the flow control of the application
 var routes = require('./routes');
 app.use('/', routes);
-
 
 module.exports = app;
