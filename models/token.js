@@ -7,6 +7,9 @@
 // Requesting the lib
 let mongoose = require('mongoose');
 
+//Added the model of user to resolve population
+require('./user');
+
 //the model of the Tokens collection
 let model = {
     user: { //Related

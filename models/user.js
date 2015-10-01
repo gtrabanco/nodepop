@@ -16,7 +16,7 @@ var Email = mongoose.SchemaTypes.Email;
 
 
 //We need the model of Tokens to populate
-var Pushtoken = require('./token');
+require('./token');
 
 //Setting up the bcrypt lib
 const SALT_WORK_FACTOR = 10; //Rounds to encrypt the password
