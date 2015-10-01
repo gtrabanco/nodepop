@@ -7,6 +7,12 @@
 // Requesting the lib
 let mongoose = require('mongoose');
 
+//Define ObjectId type
+var ObjectId = mongoose.Schema.ObjectId;
+
+//Load the connection to the database
+require('mongoConnector');
+
 //Added the model of user to resolve population
 require('./user');
 

@@ -23,5 +23,5 @@ module.exports = {
     "views cache"           : !(this.env === "development"),
     "view engine"           : "ejs",
     "x-powered-by"          : false,
-    "logger"                : (this.env === "development"?"dev":"default") //default, short, tiny or dev
+    "logger"                : (this.env === "development"?"dev":"short") //default, short, tiny or dev
 };

@@ -9,7 +9,7 @@ var router = express.Router();
  */
 
 router.all('/', function (req, res, next) {
-    response.redirect('/doc');
+    res.send('It works!');
 });
 
 

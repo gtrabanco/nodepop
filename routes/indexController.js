@@ -8,7 +8,7 @@ var router = express.Router();
  * documentation because they do not want to use the api
  */
 
-router.get('/', function (req, res, next) {
+router.all('/', function (req, res, next) {
     res.redirect('/doc');
 });
 

@@ -5,7 +5,6 @@
 var express = require('express');
 var router = express.Router();
 var indexController = require('./indexController');
-var errorController = require('./errorController');
 
 /**
  * To controll the index and any other routes I suggest one
@@ -17,11 +16,13 @@ var errorController = require('./errorController');
 
 router.use(indexController);
 
+//Other no default routes
+
+router.use(require('./registerController'));
+
 
 //All other routes in sub dirs here
 
-//Error handler for /apiV1 path
-router.use(errorController);
 
 
 module.exports = router;

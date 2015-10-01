@@ -9,10 +9,14 @@ let mongoose = require('mongoose');
 let mongooseTypes = require('mongoose-types');
 var bcrypt = require('bcrypt');
 
+//Load the connection to the database
+require('mongoConnector');
+
 
 //Setting up the mongoose-types lib
 mongooseTypes.loadTypes(mongoose);
 var Email = mongoose.SchemaTypes.Email;
+var ObjectId = mongoose.Schema.ObjectId;
 
 
 //We need the model of Tokens to populate

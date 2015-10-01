@@ -17,7 +17,6 @@ var app = express();
 //Maybe we need it, maybe we not
 app.set('app path', __dirname);
 
-
 //Get and set the configuration of the site
 var config = require('readConfigurationFiles');
 app.set('app config', config);

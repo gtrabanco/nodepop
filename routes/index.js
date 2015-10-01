@@ -17,7 +17,7 @@ router.use(indexController);
 
 
 //All other routes in sub dirs here
-router.use(/apiv1/i, require('./apiV1'));
+router.use('/apiV1', require('./apiV1'));
 
 
 

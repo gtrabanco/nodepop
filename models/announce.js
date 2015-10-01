@@ -7,6 +7,9 @@
 // Requesting the libs
 let mongoose = require('mongoose');
 
+//Load the connection to the database
+require('mongoConnector');
+
 //The model document of the announces
 let model = {
     /*

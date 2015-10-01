@@ -9,7 +9,11 @@ var router = express.Router();
  */
 
 router.all('/', function (req, res, next) {
-    response.redirect('/doc');
+    console.log('Body ', req.body);
+    console.log('Params ', req.params);
+    console.log('Query', req.query);
+    //res.redirect('/doc');
+    res.send('Nothing');
 });
 
 
