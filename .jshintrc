@@ -1,0 +1,10 @@
+// .jshintrc (poner en el root del proyecto)
+{
+  "node": true,
+  "esnext": true,
+  "globals": {},
+  "globalstrict": true,
+  "quotmark": "single",
+  "undef": true,
+  "unused": true
+}
