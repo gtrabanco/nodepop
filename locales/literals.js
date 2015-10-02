@@ -1,6 +1,6 @@
 "use strict";
 
-
+//TODO: This unsupported file by the moment
 module.exports = {
     "NOT_FOUND"         : "Not found",
     "PAGE_NOT_FOUND"    : "Page not found",

@@ -11,7 +11,8 @@ var UserModel = require(path.join(process.cwd(), 'models', 'user'));
 //    id param is the _id
 let modifyUserRoute = '/:id';
 function modifyUserRoute(req, res, next) {
-    let id =
+    let id = req.param.id;
+    //TODO: This
 }
 
 
