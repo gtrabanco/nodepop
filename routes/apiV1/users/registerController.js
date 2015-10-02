@@ -12,8 +12,9 @@ var UserModel = require(path.join(process.cwd(), 'models', 'user'));
  */
 
 router.post('/register', function (req, res, next) {
-    ////Reading the interesting vars
-    //let username = req.body.username || '';
+    ////Reading the interesting vars (it is not neccesary
+    // because mongoose only will get those that are
+    // defined in the model).
     //let email    = req.body.email;
     //let passwd   = req.body.password;
 
@@ -48,30 +49,32 @@ router.post('/register', function (req, res, next) {
 
 
 //Error handler for this contoller
-// we need to personalize the errors to give the enought
+// we need to personalize the errors to give the enough
 // and not less or more information to the user
+// So we format the messages and send the error to
+// next which should be /apiV1/errorController.js
 
 router.use('/register', function (error, req, res, next) {
     if (error.code === 11000) {
-        error.message = req.i18n.__('The email is already registered');
-        error.errors.email = req.i18n.__('Duplicated, your email are already registered.');
+        error.message = 'The email is already registered';
+        error.errors.email = 'Duplicated, your email are already registered.';
     } else {
         if (typeof error.errors.email !== 'undefinied') {
             error.code = 400;
             error.errors.email = {
-                message: req.i18n.__('The "email" is a required value.')
+                message: 'The "email" is a required value.'
             }
         }
 
         if (typeof error.errors.password !== 'undefinied') {
             error.code = 400;
             error.errors.password = {
-                message: req.i18n.__('The "password" is a required value.')
+                message: 'The "password" is a required value.'
             }
         }
     }
 
-    res.json(error);
+    next(error);
 });
 
 

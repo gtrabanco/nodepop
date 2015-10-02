@@ -5,15 +5,26 @@ var router = express.Router();
 var indexController = require('./indexController');
 var errorController = require('./errorController');
 
+//All routes here, for subdir routes and those that would
+// be considered as modules or are very complex use subdirs
+// and add here the route to the module. Is expected to use
+// index.js files. You can also use somethingConroller.js
+// for /something route.
+// The implementation is manual because I do not consider
+// necessary the complexity of search in dirs and subdirs
+// and add them automatically
+
+//Default route for this path /
 /**
- * To controll the index and any other routes I suggest one
- * index.js in every directory which runs as namespace
- * But as / Controller it would be nice to have
- * indexController.js file
- * errorController.js would be loaded the last to handle the errors
+ * If the user request / we redirect him/she to the
+ * documentation because they do not want to use the api
  */
 
-router.use(indexController);
+router.all('/', function (req, res, next) {
+    return res.redirect('/doc'); //Doc is a static dir, so it is not
+                                 // necessary to define it as a route
+});
+
 
 
 //All other routes in sub dirs here
@@ -21,7 +32,38 @@ router.use('/apiV1', require('./apiV1'));
 
 
 
-//Error handler
-router.use(errorController);
+//Default error handlers
+/**
+ * Here we handle the errors in the api
+ */
+
+// Catch 404 and forward to error handler
+router.use(function(req, res, next) {
+    var err = new Error(req.i18n.__('Not Found'));
+    err.status = 404;
+    err.code = 404;
+    next(err);
+});
+
+// error handlers
+// no stacktraces leaked to user
+router.use(function(err, req, res, next) {
+
+    console.log('The default handler');
+    let response = {
+        code: err.code,
+        message: err.message
+    };
+
+    //if we are in development we send more details
+    if (req.app.get('env') === 'development') {
+        response.error = err.error;
+    }
+    //We do not want to send any html,
+    //We are an api, we just send json
+    // response
+    //res.render('index/error', {error: response})
+    res.send(response);
+});
 
 module.exports = router;

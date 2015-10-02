@@ -13,11 +13,11 @@ var router = express.Router();
  * errorController.js would be loaded the last to handle the errors
  */
 
+router.use(indexController);
+
 //Other no default routes
 
 router.use(require('./registerController'));
-
-router.use(require('./updateController'));
 
 
 //All other routes in sub dirs here

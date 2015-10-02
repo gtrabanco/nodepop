@@ -11,7 +11,6 @@ var router = express.Router();
 // no stacktraces leaked to user
 router.use(function(err, req, res, next) {
 
-    console.log('apiV1 Error handler');
     let jsonResponse = {
         status: err.status,
         message: err.message
@@ -27,7 +26,8 @@ router.use(function(err, req, res, next) {
     res.json({
         status: err.status,
         code: err.code,
-        message: err.message
+        message: req.i18n.__(err.message),
+        errors: err.errors || {}
     });
 });
 

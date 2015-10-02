@@ -2,7 +2,7 @@
  * Users model
  */
 
-"use strict";
+'use strict';
 
 // Requesting the libs
 let mongoose = require('mongoose');
@@ -70,8 +70,10 @@ userSchema.statics.auth = function (email, password) {
 
                 return reject({
                     status: 401,
-                    message: "Not authorized",
-                    detail: "User not found"
+                    message: 'Not authorized',
+                    errors: {
+                        login: 'Incorrect user or password'
+                    }
                 });
             }
 
@@ -80,8 +82,10 @@ userSchema.statics.auth = function (email, password) {
 
                 return reject({
                     status: 401,
-                    message: "Not authorized",
-                    detail: "Password incorrect"
+                    message: 'Not authorized',
+                    errors: {
+                        login: 'Incorrect user or password'
+                    }
                 });
             }
 
