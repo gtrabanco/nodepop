@@ -14,10 +14,13 @@ var router = express.Router();
  */
 
 //Other no default routes
-
+router.use(require('./loginController'));
 router.use(require('./registerController'));
 
-router.use(require('./updateController'));
+//Here the middleware to auth user
+//router.use(require('authentication');
+
+router.use(require('./tokenControllers'));
 
 
 //All other routes in sub dirs here

@@ -2,8 +2,6 @@
 
 var express = require('express');
 var router = express.Router();
-var indexController = require('./indexController');
-var errorController = require('./errorController');
 
 //All routes here, for subdir routes and those that would
 // be considered as modules or are very complex use subdirs
@@ -49,7 +47,6 @@ router.use(function(req, res, next) {
 // no stacktraces leaked to user
 router.use(function(err, req, res, next) {
 
-    console.log('The default handler');
     let response = {
         code: err.code,
         message: err.message
@@ -63,7 +60,7 @@ router.use(function(err, req, res, next) {
     //We are an api, we just send json
     // response
     //res.render('index/error', {error: response})
-    res.send(response);
+    res.status(err.status||500).send(response);
 });
 
 module.exports = router;

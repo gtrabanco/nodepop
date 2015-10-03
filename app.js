@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var httpForbidden = require('httpForbidden');
 var i18n = require('i18n-2');
+var multer = require('multer');
 
 
 var app = express();

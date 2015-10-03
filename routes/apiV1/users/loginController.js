@@ -25,17 +25,12 @@ router.post('/login', function (req, res, next) {
 
             //User is formatted from the model to not return
             // the password
-            let token = jswt.sign(user,jswt.secret, jswt.options);
-            let response = {
-                code: 200,
-                message: req.i18n.__('User logged successfully'),
-                data: {
-                    user: user,
-                    token: token
-                }
+            let data = {
+                user: user,
+                token: jswt.sign(user, jswt.secret, jswt.options)
             };
 
-            return res.json(response);
+            return res.json(getCode('LOGIN_OK', data));
         }).
         catch(function(error) {
 

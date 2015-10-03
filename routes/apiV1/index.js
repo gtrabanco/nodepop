@@ -4,6 +4,7 @@
 
 var express = require('express');
 var router = express.Router();
+var getCode = require('getCode');
 
 //Routes of this controller
 
@@ -12,8 +13,37 @@ var router = express.Router();
 //All other routes in sub dirs here
 router.use('/users', require('./users'));
 
-//Error handler for /apiV1 path
-router.use(require('./errorController'));;
+
+/**
+ * Here we handle the errors in the api
+ */
+
+//If we are here we should return a default error with a middleware
+router.use(function (req, res, next) {
+
+    let err = {
+        code: 'NOT_FOUND',
+        data: {}
+    };
+
+    return next(err);
+});
+
+// error handlers
+// no stacktraces leaked to user
+router.use(function(err, req, res, next) {
+
+    //First check if code is defined in err
+    if (!('code' in err)) {
+        //If not, define a default code
+        err.code = 'INTERNAL';
+
+    }
+
+    let jsonData = getCode(err.code, err.data);
+    res.status(jsonData.status);
+    res.json(jsonData);
+});
 
 
 module.exports = router;

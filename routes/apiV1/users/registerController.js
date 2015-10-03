@@ -20,34 +20,47 @@ router.post('/register', function (req, res, next) {
 
     let newUser = new UserModel(req.body);
 
-    newUser.save(function (error) {
-        if (error) {
-            let customError = {
-                status: 400,
-                code: error.code,
-                message: error.message,
-                errors: error.errors || {}
-            };
+    let data = {};
 
-            return next(customError);
+    newUser.save(function (error, row) {
+        if (error) {
+            if (error.code === 11000) {
+                data.email = {
+                    message: 'The email is already registered'
+                    };
+
+            } else {
+                if (typeof error.errors.email !== 'undefinied') {
+                    data.email = {
+                        message: 'The "email" is a required value.'
+                        };
+                }
+
+                if (typeof error.errors.password !== 'undefinied') {
+                    data.password = {
+                        message: 'The "password" is a required value.'
+                        };
+                }
+            }
+
+            return next({code: 'INVALID_PARAM', data: data});
         }
 
         //Customize the response data of the user to not return the password
-        let customUserInfo = {
-            _id: newUser._id,
-            email: newUser.email
+        data = {
+            user: {
+                _id: newUser._id,
+                email: newUser.email
+            }
         };
 
-        res.json({
-            status: 201,
-            message: req.i18n.__('User registered sucessfully.'),
-            data: customUserInfo
-        });
+        res.json({code: 'CREATED', data: data});
     });
 
 });
 
 
+/*
 //Error handler for this contoller
 // we need to personalize the errors to give the enough
 // and not less or more information to the user
@@ -76,6 +89,6 @@ router.use('/register', function (error, req, res, next) {
 
     next(error);
 });
-
+//*/
 
 module.exports = router;

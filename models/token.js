@@ -24,7 +24,7 @@ let model = {
     },
     platform: {
         type: String,
-        enum: ['ios', 'android', 'windows'],
+        enum: ['ios', 'android'],
         required: true
     },
     token: {

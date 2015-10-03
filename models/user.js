@@ -39,10 +39,10 @@ let model = {
         required: true
     },
     username: String,
-    tokens: {
-        type: [ObjectId],
+    tokens: [{
+        type: ObjectId,
         ref: 'Token'
-    }
+    }]
 };
 
 //Creating the document schema with the model
@@ -69,9 +69,8 @@ userSchema.statics.auth = function (email, password) {
             if (!user) {
 
                 return reject({
-                    status: 401,
-                    message: 'Not authorized',
-                    errors: {
+                    code: 'LOGIN_FAILED',
+                    data: {
                         login: 'Incorrect user or password'
                     }
                 });
@@ -81,9 +80,8 @@ userSchema.statics.auth = function (email, password) {
             if (!this.checkPassword(password)) {
 
                 return reject({
-                    status: 401,
-                    message: 'Not authorized',
-                    errors: {
+                    code: 'LOGIN_FAILED',
+                    data: {
                         login: 'Incorrect user or password'
                     }
                 });
@@ -92,6 +90,7 @@ userSchema.statics.auth = function (email, password) {
             //If we are here the login was successful
             // we return the user without the password
             delete user.password;
+            user._id = user._id.toString();
             resolve(user);
         });
     });

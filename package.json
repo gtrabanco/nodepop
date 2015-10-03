@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "PORT=80 SPORT=443 NODE_PATH=lib ENV=production node ./bin/www",
-    "dev": "DEBUG=nodepop:* PORT=3000 SPORT=4443 NODE_PATH=lib ENV=development nodemon ./bin/www"
+    "dev": "DEBUG=nodepop:* PORT=3000 SPORT=4443 NODE_PATH=lib ENV=development nodemon ./bin/www",
+    "dummy": "NODE_PATH=lib node ./bin/dummyData.js"
   },
   "dependencies": {
     "bcrypt": "^0.8.5",
@@ -19,6 +20,7 @@
     "mongoose": "^4.1.9",
     "mongoose-types": "^1.0.3",
     "morgan": "~1.6.1",
+    "multer": "^1.0.6",
     "serve-favicon": "~2.3.0"
   },
   "description": "An api for wallapop clone as exercise for node module.",
