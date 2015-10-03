@@ -4,16 +4,36 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var multer = require('multer');
+var mime = require('mime-types');
+var moveFile = require('moveFile');
 
 var Announce = require(path.join(process.cwd(), 'models', 'announce'));
 
 
 //Custom middleware to upload a file for the photo
 router.post(function(req, res, next) {
-    let uploadDir = req.app.get('app config').app.upload_dir;
+    let uploadDir = req.app.get('app config').app.upload_temp_dir;
 
     router.post(multer({dest: uploadDir}).single('filephoto'));
     next();
+});
+
+// /apiv1[currentVersion]/announces/tags
+// GET
+// Get a list of the avaible tags
+router.get('/tags', function (req, res, next) {
+    res.json(getCode('OK', {
+        platforms: Announce.schema.path('tags').enumValues
+    }));
+});
+
+// /apiv1[currentVersion]/announces/types
+// GET
+// Get a list of the announce types
+router.get('/tags', function (req, res, next) {
+    res.json(getCode('OK', {
+        platforms: Announce.schema.path('type').enumValues
+    }));
 });
 
 /**
@@ -21,36 +41,63 @@ router.post(function(req, res, next) {
  *
  * /apiv[apiVersion]/announces/add
  */
-
 router.post('/add', function (req, res, next) {
-    /**
-     * Example of req.file
-{ fieldname: 'onefile',
-  originalname: 'Captura de pantalla 2015-09-22 a las 12.22.31.png',
-  encoding: '7bit',
-  mimetype: 'image/png',
-  destination: '/Users/gtrabanco/MyCodes/nodejs/21_express_file_upload_with_multer/upload',
-  filename: '5c6eecfe229d3afc8c262f8aba87251c',
-  path: '/Users/gtrabanco/MyCodes/nodejs/21_express_file_upload_with_multer/upload/5c6eecfe229d3afc8c262f8aba87251c',
-  size: 20847 }
 
-     http://stackoverflow.com/questions/28104012/design-pattern-for-writing-a-list-of-filters-for-image-uploading-using-node-js
-     http://stackoverflow.com/questions/6926016/nodejs-saving-a-base64-encoded-image-to-disk
+    let uploadDir = req.app.get('app config').app.upload_dir;
 
-     */
+
+    //First we need to check the file if the user send us one
+    let file = req.file || {};
+    let validMimeFiles = ['image/png', 'image/gif', 'image/jpeg', 'image/svg+xml'];
+
+    if (file) {
+
+        //filesystem library
+        let fs = require('fs');
+
+        if (validMimeFiles.indexOf(file.mimetype) === -1) {
+
+            //If it is not valid first delete the file
+            fs.unlink(file.path);
+
+            return next({code: 'UNSUPPORTED_MEDIA', data: {}});
+        }
+
+        //We could check if a file is also too large but I think is ok with this by the moment
+        // it is just an exercise to know if we know enough node/js
+
+        //Valid file
+        //Moving the file to the right path
+        let photoName = path.basename(moveFile(file.path, uploadDir));
+        if (photoName) {
+            req.photo = photoName;
+        } else {
+            return next({code: 'INTERNAL', data: {}});
+        }
+    }
+
+    /*
     let newAnnounce = new Announce({
         title: 'iPhone 4s',
         type: 'sell',
         price: 60,
-        photo: req.file,
+        photo: req.photo,
         tags: req.body.tags
+    }); */
+
+    let newAnnounce = new Announce({
+        title: req.body.title || '',
+        type: req.body.type || '',
+        price: req.body.price || '',
+        photo: req.photo || '',
+        tags: req.body.tags || []
     });
 
     newAnnounce.save(function (error, row) {
 
-        let data = {};
-
         if (error) {
+            let data = {};
+
             if (typeof error.errors.title !== 'undefinied') {
                 data.title.message = 'The "email" is a required value.';
             }
@@ -70,8 +117,12 @@ router.post('/add', function (req, res, next) {
             if (typeof error.errors.tags !== 'undefinied') {
                 data.tags.message = 'The "email" is a required value.';
             }
+
+            return next({code: 'INVALID_PARAM', data: data});
         }
 
+
+        return next({code: 'CREATED', data: row});
     })
 });
 

@@ -44,7 +44,6 @@ router.use(function(req, res, next) {
 });
 
 // error handlers
-// no stacktraces leaked to user
 router.use(function(err, req, res, next) {
 
     let response = {

@@ -39,7 +39,7 @@ let model = {
         required: true
     },
     username: String,
-    tokens: [{
+    _tokens: [{
         type: ObjectId,
         ref: 'Token'
     }]
@@ -60,7 +60,7 @@ userSchema.statics.auth = function (email, password) {
     return new Promise(function (resolve, reject) {
 
         //First get the user
-        this.findOne({email: email}, function (error, user) {
+        this.findOne({email: email}).exec(function (error, user) {
             if (error) {
                 return reject(error);
             }
@@ -114,6 +114,10 @@ userSchema.methods.checkPassword = function (candidatePassword) {
  * Custom middleware to encrypt the password
  * Be careful because the password is not encrypted
  * until save method is called
+ *
+ * We also provide a middleware to save token if added one
+ * The check that token not exists should be done
+ * previously
  */
 userSchema.pre('save', function (next) {
 
@@ -121,27 +125,26 @@ userSchema.pre('save', function (next) {
 
     //If we are not setting a new of modifying our
     // password we do not want to do anything...
-    if (!user.isModified('password')) {
-        return next();
-    }
-
-    //Generate a salt
-    bcrypt.genSalt(SALT_WORK_FACTOR, function (error, salt) {
-        if (error) {
-            return next(error);
-        }
-
-        //Hash the password
-        bcrypt.hash(user.password, salt, function (error, hash) {
+    if (user.isModified('password')) {
+        //Generate a salt
+        bcrypt.genSalt(SALT_WORK_FACTOR, function (error, salt) {
             if (error) {
                 return next(error);
             }
 
-            //Override our password with the hash
-            user.password = hash;
-            next();
+            //Hash the password
+            bcrypt.hash(user.password, salt, function (error, hash) {
+                if (error) {
+                    return next(error);
+                }
+
+                //Override our password with the hash
+                user.password = hash;
+            })
         })
-    })
+    }
+
+    next();
 });
 
 module.exports = mongoose.model('User', userSchema);

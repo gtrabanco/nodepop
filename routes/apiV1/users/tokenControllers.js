@@ -73,7 +73,7 @@ router.put('/add_token', function (req, res, err) {
     };
 
     //Send a response if no error or next with the error
-    res.json(getCode('CREATED', data));
+    return next({code: 'CREATED', data: data});
 });
 
 

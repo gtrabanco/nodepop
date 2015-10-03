@@ -54,7 +54,7 @@ router.post('/register', function (req, res, next) {
             }
         };
 
-        res.json({code: 'CREATED', data: data});
+        next({code: 'CREATED', data: data});
     });
 
 });

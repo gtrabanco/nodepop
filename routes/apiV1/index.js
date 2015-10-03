@@ -12,7 +12,7 @@ var getCode = require('getCode');
 
 //All other routes in sub dirs here
 router.use('/users', require('./users'));
-
+router.use('/announces', require('./announces'));
 
 /**
  * Here we handle the errors in the api
@@ -29,8 +29,7 @@ router.use(function (req, res, next) {
     return next(err);
 });
 
-// error handlers
-// no stacktraces leaked to user
+// Response handlers we do not only return errors with this
 router.use(function(err, req, res, next) {
 
     //First check if code is defined in err

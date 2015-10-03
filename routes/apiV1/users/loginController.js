@@ -30,7 +30,7 @@ router.post('/login', function (req, res, next) {
                 token: jswt.sign(user, jswt.secret, jswt.options)
             };
 
-            return res.json(getCode('LOGIN_OK', data));
+            return next({code: 'LOGIN_OK', data: data});
         }).
         catch(function(error) {
 

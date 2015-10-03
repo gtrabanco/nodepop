@@ -14,13 +14,14 @@ var ObjectId = mongoose.Schema.ObjectId;
 require('mongoConnector');
 
 //Added the model of user to resolve population
-require('./user');
+var User = require('./user');
 
 //the model of the Tokens collection
 let model = {
-    user: { //Related
+    _user: { //Related
         type: ObjectId,
-        ref:'User'
+        ref:'User',
+        required: true
     },
     platform: {
         type: String,
@@ -84,6 +85,27 @@ tokenSchema.statics.getUserByToken = function (token) {
             })
     });
 };
+
+/**
+ * Middleware to delete tokens from the users table when they are
+ * deleted from tokens database
+ */
+tokenSchema.post('remove', function(doc) {
+    console.log('%s has been removed', doc._id);
+    User.find({_tokens: doc.id}).exec(function (error, user) {
+        if (error) {
+            return next(error);
+        }
+        user._tokens.splice(user._tokens.indexOf(doc._id), 1);
+        user.save(function (error, user) {
+            if (error) {
+                return next(error);
+            }
+        })
+    })
+
+    return next();
+});
 
 
 module.exports = mongoose.model('Token', tokenSchema);
