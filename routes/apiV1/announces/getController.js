@@ -15,6 +15,8 @@ var Announce = require(path.join(process.cwd(), 'models', 'announce'));
 router.get('/', function (req, res, next) {
 
     let filters = {};
+    let options = {};
+    let fields = {};
 
     //If the user give us an id we do not need to check the filters
     // because id is a unique key in a collection
@@ -33,6 +35,7 @@ router.get('/', function (req, res, next) {
         //Filters!!
         //One or array
         if (typeof req.query.tag !== 'undefined') {
+
             filters.tags = req.query.tag;
         }
 
@@ -47,32 +50,63 @@ router.get('/', function (req, res, next) {
 
 
             if (range.length > 1) {
+
                 min = parseInt(range[0]) || 0;
                 max = parseInt(range[1]) || 0;
             } else {
+
                 min = 0;
                 max = parseInt(range);
             }
 
             if (max === 0 || max < min) {
+
                 filters.price = {$gt: min};
             } else {
+
                 filters.price = {$gt: min, $lt: max};
             }
         }
 
         //Return from a timestamp
         if (typeof req.query.timestamp !== 'undefined') {
+
             filters.modified = {$gt: req.query.timestamp};
         }
 
         //Search by name
         if (typeof req.query.title !== 'undefined') {
+
             filters.title = new RegExp(sprintf('^%s', req.query.title), 'i');
         }
 
 
-        Announce.findWithReq(req, filters, function (error, announces) {
+        //Now the options
+        options = {
+            start: req.query.start || 0,
+            limit: req.query.limit || 1000
+        };
+
+        //Sorting
+        //console.log('price'.match(/([-+]?)(.+)/i)); // [ 'price', '', 'price', index: 0, input: 'price' ]
+        if (typeof req.query.sort !== 'undefined') {
+            let [ , order, field, , ] = req.query.sort.match(/([-+]?)(.+)/i);
+            order = (matches[1] === '-'? -1: 1);
+
+            //Check if the field exists, if not order by modified date
+            if (Announce.schema.paths.hasOwnProperty(field)) {
+
+                options.sort [field] = order;
+            } else {
+
+                options.sort = {
+                    modified: 1
+                }
+            }
+        }
+
+
+        Announce.findWithReq(req, filters, fields, options, function (error, announces) {
 
             if (error) {
                 console.log(error);
