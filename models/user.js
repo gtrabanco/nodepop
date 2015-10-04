@@ -8,6 +8,7 @@
 let mongoose = require('mongoose');
 let mongooseTypes = require('mongoose-types');
 var bcrypt = require('bcrypt');
+var i18n = require('i18n-2');
 
 //Load the connection to the database
 require('mongoConnector');
@@ -56,17 +57,18 @@ let userSchema = new mongoose.Schema(model);
  * @return Promise
  */
 userSchema.statics.auth = function (email, password) {
+    let User = this.model('User');
 
     return new Promise(function (resolve, reject) {
 
         //First get the user
-        this.findOne({email: email}).exec(function (error, user) {
+        User.findOne({email: email}).exec(function (error, result) {
             if (error) {
                 return reject(error);
             }
 
              // User not found
-            if (!user) {
+            if (!result) {
 
                 return reject({
                     code: 'LOGIN_FAILED',
@@ -76,22 +78,24 @@ userSchema.statics.auth = function (email, password) {
                 });
             }
 
-            // Incorrect password
-            if (!this.checkPassword(password)) {
+            //Check password
+            result.checkPassword(password, function (err, isMatch) {
+                if (err) {
+                    return reject({
+                        code: 'LOGIN_FAILED',
+                        data: {
+                            login: 'Incorrect user or password'
+                        }
+                    });
+                }
 
-                return reject({
-                    code: 'LOGIN_FAILED',
-                    data: {
-                        login: 'Incorrect user or password'
-                    }
-                });
-            }
+                //If we are here the login was successful
+                // we return the user without the password
+                delete result.password;
+                result._id = result._id.toString();
+                resolve(result);
 
-            //If we are here the login was successful
-            // we return the user without the password
-            delete user.password;
-            user._id = user._id.toString();
-            resolve(user);
+            });
         });
     });
 };
@@ -102,11 +106,17 @@ userSchema.statics.auth = function (email, password) {
  * Custom method to check passwords
  *
  * @param candidatePassword
+ * @param cb Callback
  * @return Boolean
  */
-userSchema.methods.checkPassword = function (candidatePassword) {
+userSchema.methods.checkPassword = function (candidatePassword, cb) {
 
-    return bcrypt.compareSync(candidatePassword, this.password);
+    return bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+        if (err) {
+            return next(err);
+        }
+        cb(null, isMatch);
+    });
 };
 
 

@@ -28,52 +28,69 @@ router.all('/token_platforms', function (req, res, next) {
 // /apiv[currentVersion]/users/add_token
 // PUT/PATCH
 
-router.put('/add_token', function (req, res, err) {
+router.put('/add_token', function (req, res, next) {
 
     let data = {};
 
     //Get the token
-    let newToken = req.body.token || null;
+    let newToken = req.body.pushtoken || null;
 
-    //Check if the token exists in the database and if it is not null
-    // return error if exists or is null
-    if(newToken === null || Token.findOne({token: newToken})) {
+    if (!newToken) {
         data = {
-            token: 'Already exists'
+            token: req.i18n.__('You should provide a token.')
         };
 
         return next({code: 'INVALID_PARAM', data: data});
     }
 
-    //Get the current authenticate user
-    let user = User.findById(req.mytoken._id).populate('tokens');
+    //Check if the token exists in the database and if it is not null
+    // return error if exists or is null
+    return Token.findOne({token: newToken}).exec(function (error, result) {
+        if (error) {
+            data = {
+                token: req.i18n.__('Already exists')
+            };
 
-    let token = new Token({
-        userid: user._id,
-        token: newToken,
-        platform: req.body.platform
-    });
-
-
-    //Store the token in the database through the user
-    user.tokens.push(token);
-
-    user.save(function (err) {
-        if (err) {
-            console.log('Error saving a new token for a user, line 52, file updateController.js'); //This because I am
-                                                        // not pretty sure if I am doing well the saving data
-
-            return next({code: 'NOT_MODIFIED', data: err });
+            return next({code: 'INVALID_PARAM', data: data});
         }
+
+        //Get the current authenticate user
+        return User.findById(req.mytoken._id, '-password').populate('_tokens').exec(function (error, user) {
+
+            if (error) {
+                return next({code: 'NOT_MODIFIED', data: {}});
+            }
+
+
+            //Token Model with data
+            let token = new Token({
+                userid: user._id,
+                token: newToken,
+                platform: req.body.platform
+            });
+
+            //Store the token in user document
+            user._tokens.push(token);
+
+            user.save(function (err) {
+                if (err) {
+                    return next({code: 'NOT_MODIFIED', data: err });
+                }
+            });
+
+            //All right my friend
+            data = {
+                user: user
+            };
+
+            //Send a response if no error or next with the error
+            return next({code: 'CREATED', data: data});
+        });
     });
 
-    //All right my friend
-    data = {
-        user: user
-    };
-
-    //Send a response if no error or next with the error
-    return next({code: 'CREATED', data: data});
+    //Now I am doing the doc and I knew but I didn't realize that
+    // I could use Promises to do this because mongoose from v. ~4
+    // has implemented promises
 });
 
 

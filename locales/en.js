@@ -13,5 +13,9 @@
 	"Internal server error": "Internal server error",
 	"No http conection allowed. Please use https.": "No http conection allowed. Please use https.",
 	"Invalid token, it could be expired or damaged": "Invalid token, it could be expired or damaged",
-	"Method not allowed": "Method not allowed"
+	"Method not allowed": "Method not allowed",
+	"Invalid param": "Invalid param",
+	"Created": "Created",
+	"Already exists": "Already exists",
+	"Not found": "Not found"
 }

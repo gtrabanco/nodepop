@@ -7,7 +7,7 @@ var router = express.Router();
 
 //All other routes in sub dirs here
 
-router.use(require('./getController'));
+router.use(require('./indexController'));
 router.use(require('./addController'));
 
 

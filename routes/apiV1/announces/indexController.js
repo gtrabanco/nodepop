@@ -83,15 +83,16 @@ router.get('/', function (req, res, next) {
 
         //Now the options
         options = {
-            start: req.query.start || 0,
+            skip: req.query.start || 0,
             limit: req.query.limit || 1000
         };
 
         //Sorting
         //console.log('price'.match(/([-+]?)(.+)/i)); // [ 'price', '', 'price', index: 0, input: 'price' ]
         if (typeof req.query.sort !== 'undefined') {
-            let [ , order, field, , ] = req.query.sort.match(/([-+]?)(.+)/i);
-            order = (matches[1] === '-'? -1: 1);
+            let matches = req.query.sort.match(/([-+]?)(.+)/i);
+            let field = matches[2];
+            let order = (matches[1] === '-'? -1: 1);
 
             //Check if the field exists, if not order by modified date
             if (Announce.schema.paths.hasOwnProperty(field)) {
@@ -103,6 +104,18 @@ router.get('/', function (req, res, next) {
                     modified: 1
                 }
             }
+
+            console.log(options);
+        }
+
+
+        //We should add total or not?
+        if (typeof req.query.includeTotal !== 'undefinied' && req.query.includeTotal === 'true') {
+
+            req.includeTotal = true;
+        } else {
+
+            req.includeTotal = false;
         }
 
 
@@ -115,8 +128,37 @@ router.get('/', function (req, res, next) {
 
             return next({code: 'OK', data: announces});
         });
-
     }
+});
+
+// /apiv1[currentVersion]/announces/fields
+router.all('/fields', function (req, res, next) {
+    var props = [];
+
+    for (let property in Announce.schema.paths) {
+        if (property === '__v') {
+            continue;
+        }
+
+        props.push(property);
+    }
+
+    return next({
+        code: 'OK',
+        data: {
+            fields: props
+        }
+    });
+});
+
+// /apiv1[currentVersion]/announces/fields
+router.all('/field_tags', function (req, res, next) {
+    return next({
+        code: 'OK',
+        data: {
+            enum: Announce.schema.paths.tags.options.enum
+        }
+    });
 });
 
 /**

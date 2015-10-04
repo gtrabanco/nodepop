@@ -52,6 +52,7 @@ router.use(function (req, res, next) {
  */
 router.use(function(err, req, res, next) {
 
+    console.log(err);
     //First check if code is defined in err
     if (!('code' in err)) {
         //If not, define a default code

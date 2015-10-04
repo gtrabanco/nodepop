@@ -19,17 +19,49 @@ var isFunction = require('isFunction');
  * Helper function to check results and format the
  * photo used in order to don't duplicate code
  *
+ * It also calcules the total amount price of the articles in the result
+ *
  * @param req
  * @param results
  * @returns {*}
  */
 function announces_format_photo_helper(req, results) {
+    let totalBuy = 0;
+    let totalSell = 0;
+
     if (Array.isArray(results)) {
+
         for (let key in results) {
-            results[key].photo = formatedUrl(req, results[key].photo);
+
+            let r = results[key];
+
+            r.photo = formatedUrl(req, r.photo);
+
+            if (r.type === 'sell') {
+                totalSell += r.price;
+            } else {
+                totalBuy += r.price;
+            }
         }
     } else {
+
         results.photo = formatedUrl(req, results.photo);
+
+        if (r.type === 'sell') {
+            totalSell += result.price;
+        } else {
+            totalBuy += result.price;
+        }
+    }
+
+    if (req.includeTotal) {
+        if (totalSell > 0) {
+            results.push({totalSell: totalSell});
+        }
+
+        if (totalBuy > 0) {
+            results.push({totalBuy: totalBuy});
+        }
     }
 
     return results;
@@ -129,7 +161,7 @@ announceSchema.statics.findByIdWithReq = function (req, id, callback) {
 
     return this.findById(id, function (error, results) {
         if (error) {
-            return cb(error, results);
+            return callback(error, results);
         }
 
         results = announces_format_photo_helper(req, results);

@@ -31,17 +31,20 @@ router.post('/login', function (req, res, next) {
     UserModel.auth(email, passwd).
         then(function (user) {
 
+            console.log(config);
+
             //User is formatted from the model to not return
             // the password
             let data = {
                 user: user,
-                token: jswt.sign(user, jswt.secret, jswt.options)
+                token: jswt.sign(user, config.secret, config.options)
             };
 
             return next({code: 'LOGIN_OK', data: data});
         }).
         catch(function(error) {
 
+            console.log(error);
             return next(error);
         });
 });
