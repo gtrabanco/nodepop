@@ -1,0 +1,21 @@
+{
+	"Forbidden access": "Acceso restringido",
+	"The site is only accesible throught the https protocol.": "El sitio solo es accesible a través del protocolo seguro htttps.",
+	"Not Found": "No Encontrado",
+	"User registered sucessfully.": "Usuario registrado con éxito.",
+	"The email is already registered": "El correo electrónico ya existe en la base de datos.",
+	"Duplicated, your email are already registered.": "Duplicado, el correo electrónico ya existe en la base de datos.",
+	"The \"email\" is a required value.": "El campo \"email\" es obligatorio.",
+	"The \"password\" is a required value.": "El campo \"password\" es obligatorio.",
+	"Not content avaible for the request": "Sin contenido disponible para la petición.",
+	"Ok": "Correcto.",
+	"Unrecognized error": "Error desconocido",
+	"Internal server error": "Error interno.",
+	"No http conection allowed. Please use https.": "Conexión http no permitida. Use https.",
+	"Invalid token, it could be expired or damaged": "Token inválido, puede estar expirado o dañado.",
+	"Method not allowed": "Metodo no permitido.",
+	"Invalid param": "Parametro o campo incorrecto.",
+	"Created": "Creado.",
+	"Already exists": "Ya existe.",
+	"Not found": "No encontrado."
+}

@@ -6,6 +6,10 @@
  * that the developers wants to load.
  */
 
+let secret = require('./server.secret.js');
+
 exports.app = require('./app.config.js');
 exports.express = require('./express.config.js');
-exports.https = require('./server.secret.js');
+exports.https = secret.https;
+exports.db = secret.database;
+exports.jswt = secret.jsonwebtoken;

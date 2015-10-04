@@ -12,9 +12,8 @@ var app = require('../app');
 var config = app.get('app config');
 var dev = app.get('env');
 
-
 //It would be stupid try to make a multi core app if you only have one core...
-if (os.cpus().length > 1 && dev !== 'development') {
+if (os.cpus().length > 1 && dev !== 'development' && config.app.clusterMode) {
     console.info("Starting a multicore server.");
     require('./multiCore');
 } else {

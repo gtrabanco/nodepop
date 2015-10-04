@@ -56,8 +56,8 @@ if (typeof config.https !== 'undefinied' && config.https.activate === true) {
      */
 
     secServer.listen(secPort);
-    secServer.on('error', onError);
-    secServer.on('listening', onListening);
+    secServer.on('error', onSecError);
+    secServer.on('listening', onSecListening);
 }
 
 

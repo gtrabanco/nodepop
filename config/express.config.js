@@ -10,7 +10,7 @@
 
 module.exports = {
     "case sensitive routing": false,
-    "env"                   : process.env.NODE_ENV || "development", //The app prefer Enviroment vars
+    "env"                   : process.env.NODE_ENV || "production", //The app prefer Enviroment vars
     "etag"                  : "weak",
     "json callback name"    : "?callback=",
     "json replacer"         : null,
@@ -23,5 +23,5 @@ module.exports = {
     "views cache"           : !(this.env === "development"),
     "view engine"           : "ejs",
     "x-powered-by"          : false,
-    "logger"                : (this.env === "development"?"dev":"default") //default, short, tiny or dev
+    "logger"                : (this.env === "development"?"dev":"short") //default, short, tiny or dev
 };

@@ -3,12 +3,12 @@
 .DS_*
 
 #Secret js files
-*.secret.js
+#*.secret.js
 
 # Certificates
-*.pem
-*.crt
-*.key
+#*.pem
+#*.crt
+#*.key
 
 # Logs
 logs
