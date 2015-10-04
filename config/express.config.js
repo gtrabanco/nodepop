@@ -10,7 +10,7 @@
 
 module.exports = {
     "case sensitive routing": false,
-    "env"                   : process.env.NODE_ENV || "development", //The app prefer Enviroment vars
+    "env"                   : process.env.NODE_ENV || "production", //The app prefer Enviroment vars
     "etag"                  : "weak",
     "json callback name"    : "?callback=",
     "json replacer"         : null,

@@ -2,6 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
+var getCode = require('getCode');
 
 //All routes here, for subdir routes and those that would
 // be considered as modules or are very complex use subdirs
@@ -37,19 +38,13 @@ router.use('/apiV1', require('./apiV1'));
 
 // Catch 404 and forward to error handler
 router.use(function(req, res, next) {
-    var err = new Error(req.i18n.__('Not Found'));
-    err.status = 404;
-    err.code = 404;
-    next(err);
+    next({code: 'NOT_FOUND'});
 });
 
 // error handlers
 router.use(function(err, req, res, next) {
 
-    let response = {
-        code: err.code,
-        message: err.message
-    };
+    let response = getCode(err);
 
     //if we are in development we send more details
     if (req.app.get('env') === 'development') {
@@ -58,8 +53,7 @@ router.use(function(err, req, res, next) {
     //We do not want to send any html,
     //We are an api, we just send json
     // response
-    //res.render('index/error', {error: response})
-    res.status(err.status||500).send(response);
+    res.status(err.status||500).render('index/error', {error: response});
 });
 
 module.exports = router;

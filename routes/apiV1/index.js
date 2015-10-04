@@ -11,13 +11,30 @@ var getCode = require('getCode');
 
 
 //All other routes in sub dirs here
-router.use('/users', require('./users'));
+router.use('/users', require('./users')); //This has the authentication where it
+                    // needs so this module must be upper the authentication call
+
+//Auth
+router.use(require('authentication'));
+
+//From this point all things in the api that requires authentication
 router.use('/announces', require('./announces'));
 
 /**
  * Here we handle the errors in the api
  */
 
+/**
+ * @api {ALL METHODS} /
+ * @apiError NOT_FOUND The method was not found
+ * @apiErrorExample
+ *      {
+ *          'code': 'NOT_FOUND,
+ *          'status': 404,
+ *          'message': 'Not found',
+ *          'data': {}
+ *      }
+ */
 //If we are here we should return a default error with a middleware
 router.use(function (req, res, next) {
 
@@ -29,7 +46,10 @@ router.use(function (req, res, next) {
     return next(err);
 });
 
-// Response handlers we do not only return errors with this
+/**
+ * Here we handle all the responses in the api, they are not necessary an error
+ *
+ */
 router.use(function(err, req, res, next) {
 
     //First check if code is defined in err
@@ -40,6 +60,8 @@ router.use(function(err, req, res, next) {
     }
 
     let jsonData = getCode(err.code, err.data);
+    //Translate the message first
+    jsonData.message = req.i18n.__(jsonData.message);
     res.status(jsonData.status);
     res.json(jsonData);
 });

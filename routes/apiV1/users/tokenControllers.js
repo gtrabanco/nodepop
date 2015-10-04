@@ -15,9 +15,9 @@ var Token = require(path.join(process.cwd(), 'models', 'token'));
 
 
 // /apiv1[currentVersion]/users/token_platforms
-// GET
+// ANY METHOD
 // Get a list of the avaible platforms
-router.get('/token_platforms', function (req, res, next) {
+router.all('/token_platforms', function (req, res, next) {
     res.json(getCode('OK', {
         platforms: Token.schema.path('platform').enumValues
     }));
@@ -74,6 +74,14 @@ router.put('/add_token', function (req, res, err) {
 
     //Send a response if no error or next with the error
     return next({code: 'CREATED', data: data});
+});
+
+
+/**
+ * If user used invalid method for this route we must provide an error
+ */
+router.all('/add_token', function (req, res, next) {
+    return next({code:'METHOD_FORBIDDEN'});
 });
 
 

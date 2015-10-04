@@ -14,16 +14,26 @@ var router = express.Router();
  */
 
 //Other no default routes
+//First those that do not require authentication
 router.use(require('./loginController'));
 router.use(require('./registerController'));
 
 //Here the middleware to auth user
-//router.use(require('authentication');
-
-router.use(require('./tokenControllers'));
+router.use(require('authentication'));
 
 
 //All other routes in sub dirs here
+router.use(require('./tokenControllers'));
+
+
+//Error if petition to /
+/**
+ * If user used invalid method for this route we must provide an error
+ */
+router.all('/', function (req, res, next) {
+    return next({code:'METHOD_FORBIDDEN'});
+});
+
 
 
 

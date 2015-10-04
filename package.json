@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "PORT=80 SPORT=443 NODE_PATH=lib ENV=production node ./bin/www",
-    "dev": "DEBUG=nodepop:* PORT=3000 SPORT=4443 NODE_PATH=lib ENV=development nodemon ./bin/www",
+    "start": "PORT=80 SPORT=443 NODE_PATH=lib NODE_ENV=production node ./bin/www",
+    "dev": "DEBUG=nodepop:* PORT=3000 SPORT=4443 NODE_PATH=lib NODE_ENV=development nodemon ./bin/www",
     "installDB": "NODE_PATH=lib node ./bin/installDB.js"
   },
   "dependencies": {
@@ -42,5 +42,9 @@
   "bugs": {
     "url": "https://github.com/gtrabanco/nodepop/issues"
   },
-  "homepage": "https://github.com/gtrabanco/nodepop#readme"
+  "homepage": "https://github.com/gtrabanco/nodepop#readme",
+  "apidoc": {
+    "title": "Nodepop api v. 1",
+    "url": "https://localhost:4443/apiv1"
+  }
 }

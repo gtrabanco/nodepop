@@ -19,18 +19,18 @@ router.post(function(req, res, next) {
 });
 
 // /apiv1[currentVersion]/announces/tags
-// GET
+// ANY METHOD
 // Get a list of the avaible tags
-router.get('/tags', function (req, res, next) {
+router.all('/tags', function (req, res, next) {
     res.json(getCode('OK', {
         platforms: Announce.schema.path('tags').enumValues
     }));
 });
 
 // /apiv1[currentVersion]/announces/types
-// GET
+// ANY METHOD
 // Get a list of the announce types
-router.get('/tags', function (req, res, next) {
+router.all('/tags', function (req, res, next) {
     res.json(getCode('OK', {
         platforms: Announce.schema.path('type').enumValues
     }));
@@ -125,6 +125,14 @@ router.post('/add', function (req, res, next) {
         return next({code: 'CREATED', data: row});
     })
 });
+
+/**
+ * If user used invalid method for this route we must provide an error
+ */
+router.all('/add', function (req, res, next) {
+    return next({code:'METHOD_FORBIDDEN'});
+});
+
 
 
 module.exports = router;

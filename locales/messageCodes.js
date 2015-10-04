@@ -20,7 +20,7 @@ module.exports = {
         message: 'Updated'
     },
     'NOT_CONTENT'       : {
-        status : 204,
+        status : 200, //204, //Should be 204 but expressjs fails
         message: 'Not content avaible for the request'
     },
     'TOKEN_ERROR'       : {
