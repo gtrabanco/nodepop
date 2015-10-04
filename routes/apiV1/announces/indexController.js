@@ -97,7 +97,8 @@ router.get('/', function (req, res, next) {
             //Check if the field exists, if not order by modified date
             if (Announce.schema.paths.hasOwnProperty(field)) {
 
-                options.sort [field] = order;
+                options.sort = {};
+                options.sort[field] = order;
             } else {
 
                 options.sort = {

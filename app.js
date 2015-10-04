@@ -8,7 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var httpForbidden = require('httpForbidden');
 var i18n = require('i18n-2');
-var multer = require('multer');
+//var multer = require('multer');
 
 
 var app = express();
@@ -42,6 +42,10 @@ for (let key in config.express) {
         app.set(key, config.express[key]);
     }
 }
+
+
+////Add the possibility to upload a file when adding an announce
+//app.use(multer({dest: config.app.upload_temp_dir}).single('filephoto'));
 
 
 // uncomment after placing your favicon in /public

@@ -429,11 +429,12 @@ Things you can do:
  	 	```
  	 	
  	 	##### Bad petition sample results
- 	 	The error for this is `NOT_CONTENT` with status code `200`
+ 	 	The error for this is `NOT_CONTENT` with status code `200`.
 
 --
 
- 	+ **/fields [ANY]**
+   + **/fields [ANY]**
+
  	 	- No params.
 
 		##### Right petition sample
@@ -472,8 +473,10 @@ Things you can do:
  	 	If you do a bad petition for this maybe you are not logged in, a mistake in the url or internal error.
  	 	
  --
+ 
   	+ **/field_tags [ANY]**
- 	 	- No params.
+  	
+	- No params.
 
 		##### Right petition sample
 		```
@@ -506,23 +509,32 @@ Things you can do:
  	 	 	 	
  	 	##### Bad petition sample
  	 	If you do a bad petition for this maybe you are not logged in, a mistake in the url or internal error.
- 	 
- 	 ---
  	 	
- 	+ **/add_token [PUT]**
- 	 	- **platform** Should be a valid platform (see **/token_platforms** after this).
- 	 	- **pushtoken** A string of password to login later. It will be saved encrypted.
+ --
+ 
+ 	+ **/add [POST]**
+ 		
+ 		All params are required. I tried to add the possibility to upload a file but I have failed. I do not why because I got it in a example (see [the example in github](https://github.com/gtrabanco/nodejs/tree/master/21_express_file_upload_with_multer)). So now the unique way to add an announce is adding it with an url. And if you do this you could see that return valid urls for images.
+ 		
+ 	 	- **title** A title for the announce.
+ 	 	- **tags** A string of tags separated by commas without spaces.
+ 	 	- **type** `buy` or `sell`.
+ 	 	- **price** The amount of money you want or offer for a product.
+ 	 	- **photo** You must provide a valid url string.
 
-		##### Right petition sample
+ 	 	##### Right petition sample
 		```
 		Method: POST
-		Url: https://localhost:4443/apiv1/users/register
+		Url: https://localhost:4443/apiv1/announces/add
 		Headers:
 		    - Accept-language = en
 		    - x-access-token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJfaWQiOiI1NjExNjY5MjEyN2IzNDk0MTAzODE1YjEiLCJlbWFpbCI6InNhbXBsZTJAZXhhbXBsZS5jb20iLCJwYXNzd29yZCI6IjEyMzQ1IiwiX192IjowLCJfdG9rZW5zIjpbXX0.3da3-qR0k9vrL_gJkgEtUBS9Hb9qClYHdleE4cH4slHxj5MNPcIwr3I-Y8TiEcTd
 		Params:
-			- platform = ios
-			- pushtoken = aaaaaaaaabbbcd
+			- title = New Eggs Announce
+			- type = sell
+			- tags = lifestyle,work
+			- price = 202
+			- photo = http://www.luismaram.com/wp-content/uploads/2011/12/a9af7aa2b6c95e63e720201b3361705f.jpg
 		```
 		
 		##### Success message
@@ -533,39 +545,20 @@ Things you can do:
 		  "message": "Created",
 		  "code": "CREATED",
 		  "data": {
-		    "user": {
-		      "_id": "56116692127b3494103815b1",
-		      "email": "sample2@example.com",
-		      "__v": 2,
-		      "_tokens": [
-		        {
-		          "_id": "5611752f5f2a6b2411c028e6",
-		          "platform": "ios",
-		          "token": "aaaaaaaaabbbcd"
-		        }
-		      ]
-		    }
+		    "__v": 0,
+		    "title": "Other announce of nothing",
+		    "type": "sell",
+		    "price": 99,
+		    "photo": "http://www.luismaram.com/wp-content/uploads/2011/12/a9af7aa2b6c95e63e720201b3361705f.jpg",
+		    "_id": "561199048cc6cdd8139f1222",
+		    "modified": "2015-10-04T21:24:20.894Z",
+		    "tags": [
+		      "work",
+		      "lifestyle"
+		    ]
 		  }
 		}
  	 	```
  	 	
- 	 	##### Bad petition sample
- 	 	
- 	 	##### Error message for invalid params, erroneous or duplicated
- 	 	```
- 	 	{
-		  "status": 422,
-		  "message": "Invalid param",
-		  "code": "INVALID_PARAM",
-		  "data": {
-		    "token": "Already exists"
-		  }
-		}
-		```
-		
-		##### Other error
-		Other error could be **NOT_MODIFIED** with status error 304.
-
- 	 	
- 	 	
- 
+ 	 	##### Bad petition sample results
+ 	 	Somthing can happen and return an `INTERNAL` error or the most typical will be `INVALID_PARAM`

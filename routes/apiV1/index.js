@@ -23,18 +23,6 @@ router.use('/announces', require('./announces'));
 /**
  * Here we handle the errors in the api
  */
-
-/**
- * @api {ALL METHODS} /
- * @apiError NOT_FOUND The method was not found
- * @apiErrorExample
- *      {
- *          'code': 'NOT_FOUND,
- *          'status': 404,
- *          'message': 'Not found',
- *          'data': {}
- *      }
- */
 //If we are here we should return a default error with a middleware
 router.use(function (req, res, next) {
 
@@ -52,7 +40,7 @@ router.use(function (req, res, next) {
  */
 router.use(function(err, req, res, next) {
 
-    console.log(err);
+    //console.log(err); //When debugging I use to uncomment this
     //First check if code is defined in err
     if (!('code' in err)) {
         //If not, define a default code
