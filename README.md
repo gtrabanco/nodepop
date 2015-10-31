@@ -1,6 +1,7 @@
 # Nodepop v. 1.0.0
 
-You can test this api throught the url [https://nodepop.gabi.com.es] Take care of the https and http connection or it will return an error.
+You can test this api throught the url https://nodepop.gabi.com.es
+**ADVERT**Take care of the https and http connection or it will return an error.
 
 ## Introduction
 
