@@ -1,4 +1,7 @@
 # Nodepop v. 1.0.0
+
+You can test this api throught the url [https://nodepop.gabi.com.es] Take care of the https and http connection or it will return an error.
+
 ## Introduction
 
 This api is an exercise of the Keepcoding's Master Bootcamp II. The objective is to make a functional api to get info from a database that allow users to register and navigate throught the data.
