@@ -2,7 +2,7 @@
 
 You can test this api throught the url https://nodepop.gabi.com.es
 
-**ADVERT**Take care of the https and http connection or it will return an error.
+**ADVERT** Take care of the https and http connection or it will return an error.
 
 ## Introduction
 
