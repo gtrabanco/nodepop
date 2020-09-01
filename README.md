@@ -1,3 +1,5 @@
+This repo would not be updated because this was a course tutorial, so if you want to see it running it is by your risk... Be concerned about it.
+
 # Nodepop v. 1.0.0
 
 ~~You can test this api throught the url https://nodepop.gabi.com.es~~
